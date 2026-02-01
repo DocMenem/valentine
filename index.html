@@ -1,9 +1,188 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>New File</title>
+  <meta charset="UTF-8">
+  <title>Be My Valentine ❤️</title>
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #ff758c, #ff7eb3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Arial', sans-serif;
+      color: white;
+      overflow: hidden;
+    }
+
+    .container {
+      text-align: center;
+      z-index: 2;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 2.4rem;
+      margin-bottom: 20px;
+    }
+
+    #countdown {
+      font-size: 1.2rem;
+      margin-bottom: 25px;
+      opacity: 0.9;
+    }
+
+    button {
+      font-size: 1.2rem;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      margin: 10px;
+      transition: 0.3s;
+    }
+
+    #yes {
+      background-color: #fff;
+      color: #ff4d6d;
+      font-weight: bold;
+    }
+
+    #no {
+      background-color: #ff4d6d;
+      color: white;
+      position: absolute;
+    }
+
+    #warning {
+      display: none;
+      margin-top: 15px;
+      font-size: 1.2rem;
+      font-style: italic;
+      color: #fff3cd;
+    }
+
+    #message {
+      display: none;
+      font-size: 1.6rem;
+      line-height: 1.4;
+      margin-top: 25px;
+    }
+
+    /* ❤️ Floating hearts */
+    .heart {
+      position: fixed;
+      bottom: -20px;
+      font-size: 24px;
+      animation: floatUp 6s linear infinite;
+      opacity: 0.8;
+      z-index: 1;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0); opacity: 0.8; }
+      100% { transform: translateY(-110vh); opacity: 0; }
+    }
+  </style>
 </head>
+
 <body>
-<h1>Hello World</h1>
+
+  <audio id="loveSong" loop>
+    <!-- Replace this link with any romantic MP3 you like -->
+    <source src="https://cdn.pixabay.com/audio/2023/02/14/audio_1a2c7c8d5b.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="container">
+    <h1>Jaasiel 💕<br>Will you be my Valentine?</h1>
+
+    <div id="countdown"></div>
+
+    <button id="yes">Yes ❤️</button>
+    <button id="no">No 💔</button>
+
+    <div id="warning">Okay… last chance 😏</div>
+
+    <div id="message">
+      Yayyyy!!! 🥹💖<br>
+      You just made my heart so happy 💕<br>
+      I can’t wait to spend Valentine’s Day with you ❤️<br><br>
+      — Chimenem ❤️
+    </div>
+  </div>
+
+  <script>
+    const noBtn = document.getElementById("no");
+    const yesBtn = document.getElementById("yes");
+    const message = document.getElementById("message");
+    const warning = document.getElementById("warning");
+    const song = document.getElementById("loveSong");
+    const countdown = document.getElementById("countdown");
+
+    let noCount = 0;
+
+    function vibrate() {
+      if (navigator.vibrate) navigator.vibrate(80);
+    }
+
+    function showLove() {
+      song.play();
+      message.style.display = "block";
+      yesBtn.style.display = "none";
+      noBtn.style.display = "none";
+      warning.style.display = "none";
+    }
+
+    function moveNo() {
+      noCount++;
+      vibrate();
+
+      if (noCount <= 5) {
+        noBtn.style.left = Math.random() * (window.innerWidth - 120) + "px";
+        noBtn.style.top = Math.random() * (window.innerHeight - 60) + "px";
+
+        if (noCount === 5) warning.style.display = "block";
+      } else {
+        noBtn.innerHTML = "Yes ❤️";
+        noBtn.style.backgroundColor = "#fff";
+        noBtn.style.color = "#ff4d6d";
+        noBtn.style.fontWeight = "bold";
+        noBtn.onclick = showLove;
+      }
+    }
+
+    noBtn.addEventListener("click", moveNo);
+    yesBtn.addEventListener("click", showLove);
+
+    // ❤️ Floating hearts
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.innerHTML = "❤️";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.fontSize = Math.random() * 20 + 20 + "px";
+      heart.style.animationDuration = Math.random() * 3 + 4 + "s";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 7000);
+    }
+    setInterval(createHeart, 500);
+
+    // ⏳ Countdown to next Valentine’s Day
+    function updateCountdown() {
+      const now = new Date();
+      let year = now.getFullYear();
+      let valentines = new Date(year, 1, 14);
+
+      if (now > valentines) valentines = new Date(year + 1, 1, 14);
+
+      const diff = valentines - now;
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      countdown.innerHTML = `⏳ ${days} days until Valentine’s Day ❤️`;
+    }
+    updateCountdown();
+  </script>
+
 </body>
 </html>
